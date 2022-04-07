@@ -1,0 +1,46 @@
+.descWrapper {
+  display: flex;
+  text-align: center;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: white;
+
+  .title {
+    font-size: 50px;
+    margin: 0;
+    @media (min-width: 768px) {
+      font-size: 80px;
+    }
+    @media (min-width: 1024px) {
+      font-size: 100px;
+    }
+  }
+  .description {
+    margin: 20px 0 0 0;
+    font-size: 13px;
+    font-weight: 400;
+    @media (min-width: 768px) {
+      font-size: 17px;
+      width: 500px;
+      line-height: 1;
+      letter-spacing: 1px;
+    }
+  }
+}
+
+.desc-appear {
+  opacity: 0;
+}
+.desc-appear-active {
+  opacity: 1;
+  transition: opacity 1500ms;
+}
+.desc-exit {
+  opacity: 1;
+}
+.desc-exit-active {
+  opacity: 0;
+  transform: translateY(-50vw);
+  transition: opacity 400ms, transform 1000ms;
+}

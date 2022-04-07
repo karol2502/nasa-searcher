@@ -1,6 +1,12 @@
 import React from 'react';
 import axios from 'axios';
+
+import './app.css';
+
 import Gallery from './components/Gallery/gallery';
+import Background from './components/Background/background';
+import Description from './components/Description/description';
+import SearchInput from './components/SearchInput/searchInput';
 
 const NASA_API = 'https://images-api.nasa.gov/search';
 
@@ -11,6 +17,8 @@ class App extends React.Component {
       search: '',
       typingTimeout: 0,
       isFetching: false,
+      firstLoad: true,
+      pageIsGone: false,
       data: [],
     };
   }
@@ -28,6 +36,12 @@ class App extends React.Component {
     });
   }
 
+  handlePageChange() {
+    this.setState({
+      pageIsGone: true,
+    });
+  }
+
   fetchDataFromAPI() {
     this.setState({ ...this.state, isFetching: true });
     axios
@@ -37,6 +51,7 @@ class App extends React.Component {
         this.setState({
           data: response.data.collection.items,
           isFetching: false,
+          firstLoad: false,
         });
       })
       .catch((e) => {
@@ -47,14 +62,29 @@ class App extends React.Component {
 
   render() {
     return (
-      <>
-        <div>NASA images</div>
-        <input
-          placeholder="e.g. Moon"
-          onChange={(event) => this.handleInputChange(event)}
+      <div
+        className="wrapper"
+        style={
+          this.state.pageIsGone
+            ? { justifyContent: `flex-start` }
+            : { justifyContent: `center` }
+        }
+      >
+        <Background in={this.state.firstLoad} />
+        <Description
+          in={this.state.firstLoad}
+          handlePageChange={() => this.handlePageChange()}
         />
-        <Gallery results={this.state.data} />
-      </>
+        <SearchInput
+          in={this.state.firstLoad}
+          handleInputChange={(event) => this.handleInputChange(event)}
+        />
+        {!this.state.isFetching && (
+          <Gallery
+            results={this.state.pageIsGone ? this.state.data : Array(0)}
+          />
+        )}
+      </div>
     );
   }
 }
